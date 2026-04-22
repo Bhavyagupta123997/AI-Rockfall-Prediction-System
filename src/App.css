@@ -1,0 +1,228 @@
+/* ==========================================================================
+   MineSafe — application shell
+   The frame everything else renders inside: the ambient background, the
+   sidebar rail, and the scrolling content column.
+   ========================================================================== */
+
+body {
+  /* The original single linear-gradient, kept as the base coat. Two drifting
+     radial glows are layered over it in .app-ambient so the backdrop has
+     depth and slow movement instead of reading as a static wash. */
+  background: linear-gradient(183deg, var(--charcoal) 0%, var(--void) 100%);
+  background-attachment: fixed;
+  color: var(--text);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Ambient layer
+   Sits behind everything at z-index 0. Two large, heavily-blurred radial
+   glows in the product's own amber and a cold counter-tone, drifting on long
+   desynchronised loops. Very low opacity: the effect should register as the
+   background being alive, never as visible blobs.
+   -------------------------------------------------------------------------- */
+
+.app-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.app-ambient::before,
+.app-ambient::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  will-change: transform;
+}
+
+.app-ambient::before {
+  top: -18%;
+  left: 8%;
+  width: 46vw;
+  height: 46vw;
+  background: radial-gradient(circle, rgba(243, 156, 18, 0.13), transparent 70%);
+  animation: ms-drift-a 26s var(--ease-in-out) infinite;
+}
+
+.app-ambient::after {
+  right: -8%;
+  bottom: -22%;
+  width: 52vw;
+  height: 52vw;
+  background: radial-gradient(circle, rgba(106, 169, 216, 0.09), transparent 70%);
+  animation: ms-drift-b 34s var(--ease-in-out) infinite;
+}
+
+/* A faint engineering grid. Anchors the dark field so it reads as a technical
+   surface rather than empty space; masked to fade out toward the edges. */
+.app-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, #000 30%, transparent 100%);
+}
+
+/* --------------------------------------------------------------------------
+   Layout
+   -------------------------------------------------------------------------- */
+
+.app-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.app-content-wrapper {
+  display: flex;
+  flex-grow: 1;
+  min-width: 0;
+  height: 100%;
+  transition: filter var(--d-slow) var(--ease-out),
+              opacity var(--d-slow) var(--ease-out),
+              transform var(--d-slow) var(--ease-out);
+}
+
+/* Applied while an auth modal is open. The class was already being set by
+   App.jsx but had no rule behind it, so the backdrop never actually blurred.
+   The slight scale-down is what sells the modal as sitting in front. */
+.app-content-wrapper.blurred-and-disabled {
+  filter: blur(7px) saturate(0.85);
+  opacity: 0.55;
+  transform: scale(0.992);
+  pointer-events: none;
+  user-select: none;
+}
+
+.sidebar-container {
+  position: relative;
+  z-index: 20;
+  flex-shrink: 0;
+  height: 100%;
+  transition: width var(--d-slow) var(--ease-out);
+}
+
+.sidebar-container.open {
+  width: var(--sidebar-w);
+}
+
+.sidebar-container.closed {
+  width: var(--sidebar-w-collapsed);
+}
+
+/* Below this width an expanded 280px rail would leave the content column too
+   narrow to be usable, so the rail is pinned to its icon width whatever the
+   toggle says. Sidebar.css applies the matching collapsed presentation. */
+@media (max-width: 860px) {
+  .sidebar-container.open,
+  .sidebar-container.closed {
+    width: var(--sidebar-w-collapsed);
+  }
+}
+
+.main-content-container {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  scroll-behavior: smooth;
+}
+
+/* The content column gets its own faint left edge so the rail and the canvas
+   read as two distinct planes even when the sidebar background is transparent. */
+.main-content-container::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--hairline) 12%, var(--hairline) 88%, transparent);
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Page primitives shared by every route
+   -------------------------------------------------------------------------- */
+
+.page {
+  padding: var(--sp-8) var(--sp-10) var(--sp-12);
+  max-width: 1720px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  margin-bottom: var(--sp-8);
+}
+
+.page-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.page-title {
+  font-size: var(--t-2xl);
+  font-weight: 680;
+  letter-spacing: -0.025em;
+}
+
+.page-subtitle {
+  font-size: var(--t-sm);
+  color: var(--text-muted);
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+@media (max-width: 1100px) {
+  .page {
+    padding: var(--sp-6) var(--sp-5) var(--sp-10);
+  }
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: var(--sp-5) var(--sp-4) var(--sp-8);
+  }
+
+  .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .page-title {
+    font-size: var(--t-xl);
+  }
+}
