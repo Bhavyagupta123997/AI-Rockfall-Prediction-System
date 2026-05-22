@@ -1,0 +1,563 @@
+/* ==========================================================================
+   Dashboard
+   The shell rules that used to live here (.app-container, .sidebar-container,
+   .main-content-container) now belong to App.css — keeping duplicates in a
+   route stylesheet meant the layout depended on which file loaded last.
+   ========================================================================== */
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   Sticks to the top of the scrolling column so the title, clock and account
+   controls stay reachable however far down the page you are.
+   -------------------------------------------------------------------------- */
+
+.dashboard-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  padding: var(--sp-6) var(--sp-8) var(--sp-5);
+  border-bottom: 1px solid var(--hairline);
+  background: linear-gradient(180deg, rgba(12, 12, 15, 0.86), rgba(12, 12, 15, 0.62));
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+}
+
+.dashboard-title-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.dashboard-title {
+  margin: 0;
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.dashboard-subtitle {
+  font-size: var(--t-sm);
+  color: var(--text-muted);
+}
+
+.dashboard-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+/* --- Clock ---------------------------------------------------------------- */
+
+.header-clock {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 8px var(--sp-4) 8px var(--sp-3);
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+}
+
+.header-clock .ms-dot {
+  margin-left: 2px;
+}
+
+.header-clock-copy {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.header-clock-time {
+  font-family: var(--font-mono);
+  font-size: var(--t-base);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+
+.header-clock-date {
+  font-size: 0.6875rem;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+/* --- Auth ---------------------------------------------------------------- */
+
+.auth-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.user-profile-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.user-greeting {
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 9px 5px 5px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  transition: border-color var(--d-fast) var(--ease-out),
+              background-color var(--d-fast) var(--ease-out);
+}
+
+.user-trigger:hover {
+  border-color: var(--hairline-strong);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.user-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(150deg, var(--accent-tint-strong), rgba(0, 0, 0, 0.4));
+  color: var(--text);
+  font-size: 17px;
+}
+
+.notification-arrow {
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  transition: transform var(--d-slow) var(--ease-out), color var(--d-fast) var(--ease-out);
+}
+
+.notification-arrow.open {
+  transform: rotate(180deg);
+  color: var(--accent-vivid);
+}
+
+/* --- Profile dropdown ----------------------------------------------------- */
+
+.notification-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 120;
+  min-width: 264px;
+  padding: var(--sp-2);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline-strong);
+  background: linear-gradient(170deg, rgba(40, 41, 48, 0.96), rgba(12, 12, 15, 0.98));
+  box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  /* The panel grows out of the trigger rather than fading in place. */
+  transform-origin: top right;
+  animation: ms-modal-in var(--d-panel-in) var(--ease-spring);
+}
+
+.dropdown-profile-info {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.profile-avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(243, 156, 18, 0.34);
+  background: linear-gradient(150deg, var(--accent), var(--accent-deep));
+  color: #1a1205;
+  font-size: var(--t-lg);
+  font-weight: 700;
+}
+
+.profile-identity {
+  min-width: 0;
+}
+
+.profile-name {
+  font-size: var(--t-base);
+  font-weight: 660;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+.profile-email {
+  font-size: var(--t-xs);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-meta {
+  margin: var(--sp-2) 0 0;
+  padding: 0 var(--sp-3);
+}
+
+.profile-meta-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: 5px 0;
+}
+
+.profile-meta-row dt {
+  font-size: var(--t-xs);
+  color: var(--text-faint);
+}
+
+.profile-meta-row dd {
+  margin: 0;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.dropdown-divider {
+  height: 1px;
+  border: 0;
+  margin: var(--sp-2) 0;
+  background: var(--hairline);
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 9px var(--sp-3);
+  border-radius: var(--r-sm);
+  color: var(--text-secondary);
+  font-size: var(--t-sm);
+  font-weight: 560;
+  text-align: left;
+  transition: background-color var(--d-fast) var(--ease-out), color var(--d-fast) var(--ease-out);
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+.dropdown-item--danger:hover {
+  background: var(--risk-critical-tint);
+  color: var(--risk-critical-vivid);
+}
+
+/* --------------------------------------------------------------------------
+   Signup confirmation banner
+   -------------------------------------------------------------------------- */
+
+.signup-success-message {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: var(--sp-5) var(--sp-8) 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  border: 1px solid rgba(127, 194, 45, 0.3);
+  background: linear-gradient(120deg, var(--risk-low-tint), rgba(0, 0, 0, 0.3));
+  color: var(--text);
+  font-size: var(--t-sm);
+  box-shadow: var(--shadow-md);
+  animation: ms-fade-down var(--d-slow) var(--ease-out);
+}
+
+.signup-success-icon {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--risk-low-tint);
+  color: var(--risk-low-vivid);
+}
+
+.signup-success-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.signup-success-text {
+  flex: 1;
+}
+
+.close-message-button {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-xs);
+  color: var(--text-muted);
+  transition: background-color var(--d-fast) var(--ease-out), color var(--d-fast) var(--ease-out);
+}
+
+.close-message-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   Content grid
+   -------------------------------------------------------------------------- */
+
+.dashboard-content-wrapper {
+  flex-grow: 1;
+  transition: filter var(--d-slow) var(--ease-out), opacity var(--d-slow) var(--ease-out);
+}
+
+.dashboard-content-wrapper.blurred-background {
+  filter: blur(4px);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-8) var(--sp-12);
+}
+
+.main-dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.6fr) minmax(min(300px, 100%), 1fr);
+  gap: var(--sp-5);
+  align-items: stretch;
+}
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  min-width: 0;
+}
+
+/* Sectional entrance. The KPI row carries its own per-card delays from the
+   component, so the panels below it pick the sequence up from there rather
+   than all landing together the moment the route mounts.
+   `backwards` holds the first frame during the delay, which is what stops a
+   panel flashing at full opacity before its turn. */
+.dashboard-header {
+  animation: ms-fade-down var(--d-slow) var(--ease-out) backwards;
+}
+
+.main-dashboard-grid > *,
+.bottom-row-sections > * {
+  animation: ms-card-in var(--d-slow) var(--ease-out) backwards;
+}
+
+.main-dashboard-grid > *:nth-child(1) { animation-delay: 180ms; }
+.main-dashboard-grid > *:nth-child(2) { animation-delay: 230ms; }
+
+.bottom-row-sections > *:nth-child(1) { animation-delay: 280ms; }
+.bottom-row-sections > *:nth-child(2) { animation-delay: 330ms; }
+.bottom-row-sections > *:nth-child(3) { animation-delay: 380ms; }
+
+/* min(320px, 100%) rather than a bare 320px: below that width a fixed track
+   minimum is wider than the column itself and the row overflows instead of
+   collapsing to one card. Same pattern is used on every auto-fit grid. */
+.bottom-row-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: var(--sp-5);
+}
+
+/* --- Shared panel chrome for the dashboard sections ---------------------- */
+
+.map-and-legend,
+.risk-distribution-section,
+.ground-vibration-chart-section,
+.recent-alerts-section,
+.quick-statistics-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 240px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: linear-gradient(160deg, rgba(52, 53, 61, 0.55) 0%, rgba(12, 12, 15, 0.84) 100%);
+  box-shadow: var(--shadow-md), var(--inner-light);
+  overflow: hidden;
+  isolation: isolate;
+  transition: border-color var(--d-base) var(--ease-out),
+              box-shadow var(--d-slow) var(--ease-out),
+              transform var(--d-base) var(--ease-out);
+}
+
+/* Same bevel seam as .ms-panel so every container on the page catches light
+   from the same direction. */
+.map-and-legend::after,
+.risk-distribution-section::after,
+.ground-vibration-chart-section::after,
+.recent-alerts-section::after,
+.quick-statistics-section::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  z-index: 3;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16) 22%, rgba(255, 255, 255, 0.16) 78%, transparent);
+  pointer-events: none;
+}
+
+.map-and-legend:hover,
+.risk-distribution-section:hover,
+.ground-vibration-chart-section:hover,
+.recent-alerts-section:hover,
+.quick-statistics-section:hover {
+  border-color: var(--hairline-strong);
+  box-shadow: var(--shadow-lg), var(--inner-light);
+}
+
+/* The vibration panel navigates on click, so it gets the affordance. */
+.ground-vibration-chart-section {
+  cursor: pointer;
+}
+
+.ground-vibration-chart-section:hover {
+  transform: translateY(-4px);
+}
+
+/* --- Texture backdrops ---------------------------------------------------
+   The two photographic textures the dashboard already shipped with, pushed
+   well back: dimmed, desaturated and masked so they read as surface material
+   rather than as pictures competing with the data on top.
+   -------------------------------------------------------------------------- */
+
+.recent-alerts-section::before,
+.quick-statistics-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.16;
+  filter: grayscale(0.7) contrast(1.1);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 60%);
+  mask-image: linear-gradient(180deg, transparent, #000 60%);
+  pointer-events: none;
+}
+
+.recent-alerts-section::before {
+  background-image: url('../assets/ground1.png');
+}
+
+.quick-statistics-section::before {
+  background-image: url('../assets/graph.png');
+}
+
+.recent-alerts-section > *,
+.quick-statistics-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Legacy placeholders, replaced by IndiaRiskMap. */
+.map-section,
+.map-placeholder,
+.dashboard-title-underline {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1280px) {
+  .main-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1100px) {
+  .dashboard-header,
+  .dashboard-content {
+    padding-left: var(--sp-5);
+    padding-right: var(--sp-5);
+  }
+
+  .signup-success-message {
+    margin-left: var(--sp-5);
+    margin-right: var(--sp-5);
+  }
+}
+
+@media (max-width: 720px) {
+  .dashboard-header {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: var(--sp-5) var(--sp-4) var(--sp-4);
+  }
+
+  .dashboard-header-right {
+    width: 100%;
+    justify-content: space-between;
+    /* The clock and the auth controls together are wider than a phone, so
+       they are allowed to stack rather than push the header out of frame. */
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+  }
+
+  .dashboard-title {
+    font-size: var(--t-xl);
+  }
+
+  .dashboard-content {
+    padding: var(--sp-5) var(--sp-4) var(--sp-10);
+    gap: var(--sp-4);
+  }
+
+  .header-clock-date {
+    display: none;
+  }
+
+  .user-greeting {
+    display: none;
+  }
+}
