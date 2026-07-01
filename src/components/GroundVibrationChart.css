@@ -1,0 +1,329 @@
+/* ==========================================================================
+   Ground vibration
+   Two surfaces share this file: the dashboard tile (.ground-vibration-chart)
+   and the full detail page (.ground-vibration-chart-container).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Dashboard tile
+   -------------------------------------------------------------------------- */
+
+.ground-vibration-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  flex: 1;
+  width: 100%;
+  padding: var(--sp-5);
+  color: var(--text);
+}
+
+.gv-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.gv-heading h2 {
+  margin: 0;
+  font-size: var(--t-lg);
+  font-weight: 620;
+  letter-spacing: -0.012em;
+}
+
+.gv-heading h3 {
+  margin: 3px 0 0;
+  font-size: var(--t-xs);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* --- Readout -------------------------------------------------------------- */
+
+.gv-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gv-value {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--text);
+}
+
+.gv-unit {
+  font-size: var(--t-sm);
+  font-weight: 560;
+  letter-spacing: 0;
+  color: var(--text-muted);
+}
+
+.gv-readout-label {
+  font-size: var(--t-xs);
+  color: var(--text-faint);
+}
+
+/* --- Bars -----------------------------------------------------------------
+   preserveAspectRatio="none" lets the bar field stretch to the tile width,
+   so the rects need no per-viewport maths.
+   -------------------------------------------------------------------------- */
+
+.gv-chart {
+  margin-top: auto;
+}
+
+.gv-svg {
+  display: block;
+  width: 100%;
+  height: 96px;
+  overflow: visible;
+}
+
+.gv-bar {
+  fill: var(--accent);
+  opacity: 0.85;
+  transform-origin: bottom;
+  transform-box: fill-box;
+  /* Each bar rises from the axis, left to right. */
+  animation: gv-rise 480ms var(--ease-out) backwards;
+  transition: fill var(--d-fast) var(--ease-out), opacity var(--d-fast) var(--ease-out);
+}
+
+@keyframes gv-rise {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+.gv-bar:hover,
+.gv-bar.is-hovered {
+  opacity: 1;
+  fill: var(--accent-vivid);
+}
+
+/* Anything past the 1.0 mm/s blasting limit is called out in the alarm colour
+   rather than left for the reader to compare against the line by eye. */
+.gv-bar--over {
+  fill: var(--risk-critical-vivid);
+  opacity: 1;
+  filter: drop-shadow(0 0 6px var(--risk-critical-glow));
+}
+
+.gv-bar--over:hover {
+  fill: var(--risk-critical-vivid);
+}
+
+.gv-threshold {
+  stroke: var(--risk-critical-vivid);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  opacity: 0.55;
+}
+
+/* --------------------------------------------------------------------------
+   Detail page
+   -------------------------------------------------------------------------- */
+
+.ground-vibration-chart-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 600px;
+  margin: var(--sp-6) auto;
+  padding: var(--sp-8);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: linear-gradient(160deg, rgba(52, 53, 61, 0.55) 0%, rgba(12, 12, 15, 0.86) 100%);
+  box-shadow: var(--shadow-lg), var(--inner-light);
+  color: var(--text-secondary);
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  margin-bottom: var(--sp-8);
+  padding-bottom: var(--sp-5);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.chart-header h2 {
+  margin: 0;
+  font-size: var(--t-2xl);
+  font-weight: 680;
+  letter-spacing: -0.025em;
+  color: var(--text);
+}
+
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-3);
+}
+
+.timeframe-selector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+}
+
+.timeframe-selector button {
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+  color: var(--text-muted);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  transition: background-color var(--d-fast) var(--ease-out),
+              color var(--d-fast) var(--ease-out);
+}
+
+.timeframe-selector button:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.timeframe-selector button.active {
+  background: var(--accent-tint-strong);
+  color: var(--accent-vivid);
+  box-shadow: inset 0 0 0 1px rgba(243, 156, 18, 0.3);
+}
+
+/* Now a wrapper around the styled Select rather than a native control, so it
+   only has to reserve width. */
+.location-selector {
+  min-width: 190px;
+}
+
+.back-to-dashboard-button {
+  padding: 8px 16px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-strong);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  color: var(--text);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  transition: transform var(--d-fast) var(--ease-out),
+              border-color var(--d-fast) var(--ease-out);
+}
+
+.back-to-dashboard-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.chart-area {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin-bottom: var(--sp-8);
+}
+
+.summary-statistics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: var(--sp-5);
+  margin-bottom: var(--sp-8);
+}
+
+.stat-card {
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  transition: border-color var(--d-base) var(--ease-out),
+              transform var(--d-base) var(--ease-out);
+}
+
+.stat-card:hover {
+  border-color: var(--hairline-strong);
+  transform: translateY(-2px);
+}
+
+.stat-card h4 {
+  margin: 0 0 6px;
+  font-size: var(--t-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: var(--t-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.stat-card p strong {
+  color: inherit;
+}
+
+.contextual-info {
+  margin-top: var(--sp-6);
+  padding: var(--sp-5);
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--info);
+  background: var(--info-tint);
+  font-size: var(--t-sm);
+  line-height: 1.6;
+}
+
+.contextual-info span {
+  font-weight: 660;
+  color: var(--text);
+}
+
+.threshold-line.high {
+  color: var(--risk-critical-vivid);
+}
+
+.weather-condition,
+.sensor-id,
+.sensor-location {
+  color: var(--text-secondary);
+}
+
+.vibration-chart-image,
+.chart-placeholder-content {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .ground-vibration-chart {
+    padding: var(--sp-4);
+  }
+
+  .ground-vibration-chart-container {
+    padding: var(--sp-5);
+    margin: var(--sp-4) auto;
+  }
+
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .controls-container {
+    align-items: flex-start;
+    width: 100%;
+  }
+}
