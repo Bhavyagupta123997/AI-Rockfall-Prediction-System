@@ -1,0 +1,148 @@
+/* ==========================================================================
+   Mining alert report
+   Every rule is scoped under .mining-alert-report. The previous version
+   declared .section and .chart-container globally — the same .chart-container
+   the sensors page uses for its recharts panel — so importing this component
+   anywhere would have repainted that panel white.
+   ========================================================================== */
+
+.mining-alert-report {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-6);
+  font-family: var(--font-sans);
+  color: var(--text);
+}
+
+.mining-alert-report h1 {
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.mining-alert-report .section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: linear-gradient(160deg, rgba(52, 53, 61, 0.48) 0%, rgba(11, 11, 14, 0.86) 100%);
+  box-shadow: var(--shadow-md), var(--inner-light);
+}
+
+.mining-alert-report .section h2,
+.mining-alert-report .section h3 {
+  font-size: var(--t-lg);
+  font-weight: 640;
+  letter-spacing: -0.012em;
+  color: var(--text);
+}
+
+/* --- Key metrics ---------------------------------------------------------- */
+
+.mining-alert-report .key-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: var(--sp-3);
+}
+
+.mining-alert-report .key-metrics p {
+  margin: 0;
+  padding: var(--sp-3);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  font-size: var(--t-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+/* --- Alert log table ------------------------------------------------------ */
+
+.mining-alert-report .alert-log {
+  overflow-x: auto;
+}
+
+.mining-alert-report .alert-log table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--t-sm);
+}
+
+.mining-alert-report .alert-log th,
+.mining-alert-report .alert-log td {
+  padding: 10px var(--sp-3);
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+}
+
+.mining-alert-report .alert-log th {
+  background: var(--panel-sunken);
+  font-size: var(--t-eyebrow);
+  font-weight: 620;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.mining-alert-report .alert-log td {
+  color: var(--text-secondary);
+}
+
+.mining-alert-report .alert-log tr:last-child td {
+  border-bottom: none;
+}
+
+.mining-alert-report .alert-log tbody tr {
+  transition: background-color var(--d-fast) var(--ease-out);
+}
+
+.mining-alert-report .alert-log tbody tr:hover {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+/* --- Charts --------------------------------------------------------------- */
+
+.mining-alert-report .alert-analytics-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: var(--sp-4);
+}
+
+.mining-alert-report .chart-container {
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline);
+  background: var(--panel-sunken);
+  box-shadow: none;
+}
+
+/* --- Corrective actions --------------------------------------------------- */
+
+.mining-alert-report .corrective-actions ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mining-alert-report .corrective-actions li {
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--accent);
+  background: var(--panel-sunken);
+  font-size: var(--t-sm);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 720px) {
+  .mining-alert-report {
+    padding: var(--sp-4);
+  }
+}
