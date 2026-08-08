@@ -1,0 +1,448 @@
+/* ==========================================================================
+   Login modal
+   Shared with the signup modal, which imports the same brand mark and reuses
+   these field styles through its own stylesheet.
+   ========================================================================== */
+
+.login-page-overlay,
+.signup-page-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-5);
+  background: rgba(4, 4, 6, 0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  overflow-y: auto;
+  animation: ms-fade-in var(--d-base) var(--ease-out);
+}
+
+.login-page-container,
+.signup-page-container {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: var(--sp-8) var(--sp-7, 28px) var(--sp-6);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--hairline-strong);
+  background: linear-gradient(168deg, rgba(48, 49, 57, 0.92) 0%, rgba(10, 10, 13, 0.97) 62%);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  animation: ms-modal-in var(--d-panel-in) var(--ease-spring);
+}
+
+/* An amber glow bleeding in from the top corner keeps the panel from reading
+   as a plain dark rectangle, and echoes the signal colour used throughout. */
+.login-page-container::before,
+.signup-page-container::before {
+  content: "";
+  position: absolute;
+  top: -140px;
+  left: -80px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(243, 156, 18, 0.16), transparent 68%);
+  filter: blur(28px);
+  pointer-events: none;
+  animation: ms-drift-a 22s var(--ease-in-out) infinite;
+}
+
+.login-page-container > *,
+.signup-page-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+.close-button {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 1.35rem;
+  line-height: 1;
+  transition: background-color var(--d-fast) var(--ease-out),
+              color var(--d-fast) var(--ease-out),
+              border-color var(--d-fast) var(--ease-out);
+}
+
+.close-button:hover {
+  border-color: var(--hairline);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   Brand
+   -------------------------------------------------------------------------- */
+
+.login-page-container .header,
+.signup-page-container .header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--hairline-strong);
+  background: linear-gradient(150deg, rgba(243, 156, 18, 0.18), rgba(0, 0, 0, 0.42));
+  color: #ffffff;
+  box-shadow: var(--inner-light), 0 8px 22px -10px var(--accent-glow);
+  animation: ms-float 6s var(--ease-in-out) infinite;
+}
+
+.brand-mark svg {
+  width: 32px;
+  height: 32px;
+  overflow: visible;
+}
+
+.brand-node,
+.brand-wave {
+  animation: ms-breathe 2.6s var(--ease-in-out) infinite;
+}
+
+.brand-wave { animation-delay: 0.25s; }
+.brand-wave-2 { animation-delay: 0.5s; }
+
+.app-brand h1 {
+  font-size: var(--t-xl);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text);
+}
+
+.app-brand p {
+  font-size: var(--t-xs);
+  color: var(--text-muted);
+}
+
+.auth-intro {
+  margin-bottom: var(--sp-5);
+  font-size: var(--t-sm);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.login-page-container h2,
+.signup-page-container h2 {
+  margin-bottom: var(--sp-4);
+  font-size: var(--t-lg);
+  font-weight: 640;
+}
+
+/* Empty heading the login markup keeps for spacing. */
+.login-page-container h2:empty {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Fields
+   -------------------------------------------------------------------------- */
+
+.login-page-container form,
+.signup-page-container form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group > label {
+  font-size: var(--t-xs);
+  font-weight: 620;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+}
+
+.input-with-icon,
+.input-with-button,
+.select-with-icon,
+.custom-upload-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.field-icon {
+  position: absolute;
+  left: 13px;
+  display: grid;
+  place-items: center;
+  color: var(--text-faint);
+  pointer-events: none;
+  transition: color var(--d-fast) var(--ease-out);
+}
+
+.field-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.input-with-icon input,
+.input-with-button input,
+.select-with-icon select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline);
+  background: rgba(0, 0, 0, 0.38);
+  color: var(--text);
+  font-size: var(--t-sm);
+  transition: border-color var(--d-fast) var(--ease-out),
+              box-shadow var(--d-fast) var(--ease-out),
+              background-color var(--d-fast) var(--ease-out);
+}
+
+/* Only pad for the icon where one is actually rendered. */
+.input-with-icon:has(.field-icon) input {
+  padding-left: 40px;
+}
+
+.input-with-icon input::placeholder,
+.input-with-button input::placeholder {
+  color: var(--text-faint);
+}
+
+.input-with-icon input:hover,
+.input-with-button input:hover,
+.select-with-icon select:hover {
+  border-color: var(--hairline-strong);
+}
+
+.input-with-icon input:focus,
+.input-with-button input:focus,
+.select-with-icon select:focus {
+  outline: none;
+  border-color: rgba(243, 156, 18, 0.55);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+.input-with-icon:focus-within .field-icon {
+  color: var(--accent-vivid);
+}
+
+.select-with-icon select option {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.select-with-icon .fa-chevron-down {
+  position: absolute;
+  right: 14px;
+  font-size: 0.7rem;
+  color: var(--text-faint);
+  pointer-events: none;
+}
+
+.reveal-button {
+  position: absolute;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-xs);
+  color: var(--text-muted);
+  transition: background-color var(--d-fast) var(--ease-out), color var(--d-fast) var(--ease-out);
+}
+
+.reveal-button svg {
+  width: 17px;
+  height: 17px;
+}
+
+.reveal-button:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   Options row
+   -------------------------------------------------------------------------- */
+
+.options-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.remember-me input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.remember-me label {
+  font-size: var(--t-xs);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.forgot-password {
+  padding: 0;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--accent-vivid);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   Feedback and submit
+   -------------------------------------------------------------------------- */
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 10px var(--sp-3);
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(242, 44, 44, 0.34);
+  background: var(--risk-critical-tint);
+  font-size: var(--t-xs);
+  line-height: 1.5;
+  color: var(--text);
+  animation: ms-fade-down var(--d-base) var(--ease-out);
+}
+
+.error-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--risk-critical-vivid);
+}
+
+.error-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 10px var(--sp-3);
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(158, 220, 76, 0.32);
+  background: var(--risk-low-tint);
+  font-size: var(--t-xs);
+  color: var(--text);
+}
+
+.login-submit-button,
+.signup-submit-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(243, 156, 18, 0.45);
+  background: linear-gradient(180deg, var(--accent-vivid), var(--accent-deep));
+  color: #1a1205;
+  font-size: var(--t-base);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow: 0 8px 24px -10px var(--accent-glow);
+  transition: transform var(--d-fast) var(--ease-out),
+              box-shadow var(--d-base) var(--ease-out),
+              opacity var(--d-fast) var(--ease-out);
+}
+
+.login-submit-button:hover:not(:disabled),
+.signup-submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px -10px var(--accent-glow);
+}
+
+.login-submit-button:active:not(:disabled),
+.signup-submit-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.99);
+}
+
+.login-submit-button:disabled,
+.signup-submit-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.button-spinner {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid rgba(26, 18, 5, 0.3);
+  border-top-color: #1a1205;
+  animation: ms-spin 0.7s linear infinite;
+}
+
+.signup-text {
+  margin-top: var(--sp-5);
+  text-align: center;
+  font-size: var(--t-xs);
+  color: var(--text-muted);
+}
+
+.signup-link {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--accent-vivid);
+  font-size: inherit;
+  font-weight: 660;
+  cursor: pointer;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .login-page-container,
+  .signup-page-container {
+    padding: var(--sp-6) var(--sp-5) var(--sp-5);
+    border-radius: var(--r-lg);
+  }
+}

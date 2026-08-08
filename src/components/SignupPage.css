@@ -1,0 +1,130 @@
+/* ==========================================================================
+   Signup modal
+   The overlay, panel, brand block, field and submit styles are shared with
+   the login modal and defined once in LoginPage.css — which is always loaded,
+   since SignupPage imports the brand mark from that module. Only what is
+   specific to the longer signup form lives here.
+   ========================================================================== */
+
+.signup-page-container {
+  /* The signup form carries eight fields, so it needs more width than the
+     login panel and has to be able to scroll inside the viewport. */
+  max-width: 500px;
+  max-height: calc(100vh - var(--sp-10));
+  overflow-y: auto;
+}
+
+.signup-page-container h2 {
+  margin-bottom: var(--sp-5);
+  font-size: var(--t-xl);
+  font-weight: 680;
+  letter-spacing: -0.025em;
+}
+
+/* --------------------------------------------------------------------------
+   Location field
+   -------------------------------------------------------------------------- */
+
+.input-with-button {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-2);
+}
+
+.input-with-button input {
+  flex: 1;
+  min-width: 0;
+}
+
+.get-location-button {
+  flex-shrink: 0;
+  padding: 0 14px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--hairline-strong);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  color: var(--text-secondary);
+  font-size: var(--t-xs);
+  font-weight: 620;
+  white-space: nowrap;
+  transition: border-color var(--d-fast) var(--ease-out),
+              color var(--d-fast) var(--ease-out),
+              transform var(--d-fast) var(--ease-out);
+}
+
+.get-location-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(243, 156, 18, 0.45);
+  color: var(--accent-vivid);
+}
+
+/* --------------------------------------------------------------------------
+   ID proof upload
+   -------------------------------------------------------------------------- */
+
+.custom-upload-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.signup-page-container .custom-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 10px 16px;
+  border-radius: var(--r-sm);
+  border: 1px dashed var(--hairline-strong);
+  background: rgba(0, 0, 0, 0.32);
+  color: var(--text-secondary);
+  font-size: var(--t-xs);
+  font-weight: 620;
+  cursor: pointer;
+  transition: border-color var(--d-fast) var(--ease-out),
+              color var(--d-fast) var(--ease-out),
+              background-color var(--d-fast) var(--ease-out);
+}
+
+.signup-page-container .custom-upload-btn:hover {
+  border-color: rgba(243, 156, 18, 0.5);
+  background: var(--accent-tint);
+  color: var(--accent-vivid);
+}
+
+.id-proof-filename {
+  font-size: var(--t-xs);
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Select
+   -------------------------------------------------------------------------- */
+
+.select-with-icon {
+  position: relative;
+}
+
+.select-with-icon select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 38px;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .signup-page-container {
+    max-height: calc(100vh - var(--sp-6));
+  }
+
+  .input-with-button {
+    flex-direction: column;
+  }
+
+  .get-location-button {
+    width: 100%;
+    padding: 10px 14px;
+  }
+}
